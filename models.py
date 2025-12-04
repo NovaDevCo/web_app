@@ -36,7 +36,7 @@ class User(UserMixin, db.Model):
     birthdate = db.Column(db.Date, nullable=True)
     contact_num = db.Column(db.String(20), nullable=False, default="N/A")
     bio = db.Column(db.Text, nullable=True)
-    profile_img_url = db.Column(db.String(250), nullable=True, default='artisans/Althea Ramos.jpg')
+    profile_img_url = db.Column(db.String(250), nullable=True, default='images/default.png')
 
 
     # Relationships
@@ -90,5 +90,21 @@ class Item(db.Model):
     stock = db.Column(db.Integer, default=0)
     img_url = db.Column(db.String(250), nullable=True)
 
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     # Foreign Key to Shop
     shop_id = db.Column(db.Integer, db.ForeignKey('shops.shop_id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Item {self.name}>'
+
+class Category(db.Model):
+    __tablename__ = 'category'
+    id = db.Column(db.Integer, primary_key=True)
+    # Matching your form validator (max=300)
+    name = db.Column(db.String(300), nullable=False, unique=True)
+    
+    # Relationship: Allows you to type item.category.name or category.items
+    items = db.relationship('Item', backref='category', lazy=True)
+
+    def __repr__(self):
+        return f'<Category {self.name}>'

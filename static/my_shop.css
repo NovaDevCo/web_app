@@ -148,6 +148,26 @@
     margin-top: 40px;
     color: #aaa;
 }
+/* Add this to my_shop.css */
+
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.category-badge {
+    background-color: #e0f2f1; /* Light Teal */
+    color: #00695c;            /* Dark Teal Text */
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
 
 /* Responsive */
 @media screen and (max-width: 900px) {

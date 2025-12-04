@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, TextAreaField, DecimalField, IntegerField, DateField, RadioField
+from wtforms import StringField, PasswordField, BooleanField, TextAreaField, DecimalField, IntegerField, DateField 
 from wtforms.validators import DataRequired, Length, EqualTo, NumberRange, Optional
 from flask_wtf.file import FileField, FileAllowed
 
@@ -44,3 +44,12 @@ class ItemForm(FlaskForm):
     price = DecimalField('Price', validators=[DataRequired(), NumberRange(min=0)])
     stock = IntegerField('Available Stock', validators=[DataRequired(), NumberRange(min=0)])
     image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
+    category = StringField('Category', validators=[DataRequired(), Length(max=300)])
+
+    
+
+class Add_to_cart(FlaskForm):
+    pass
+
+class Rate_shop(FlaskForm):
+    pass

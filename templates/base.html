@@ -52,6 +52,7 @@
                             
                             {% if current_user.shops|length > 0 %}
                                 <a href="{{ url_for('views.my_shop') }}" style="color: #ffcc00;">My Shop</a>
+                                <a href="{{ url_for('views.dashboard') }}">Dashboard</a>
                             {% else %}
                                 <a href="{{ url_for('views.create_shop') }}">Create Shop</a>
                             {% endif %}

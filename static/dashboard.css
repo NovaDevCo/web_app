@@ -1,0 +1,64 @@
+/* Overall Dashboard Container */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Dashboard Title */
+.container h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4cafef;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Statistic Cards */
+.card {
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2a2a3d, #1e1e2f);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.6);
+}
+.card-body h5 {
+    font-size: 1.1rem;
+    color: #aaa;
+    margin-bottom: 10px;
+}
+.card-body h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #4cafef;
+}
+
+/* Recent Items Section */
+h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 40px;
+    color: #fff;
+}
+
+.list-group-item {
+    background: #2a2a3d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background 0.2s ease;
+}
+.list-group-item:hover {
+    background: #3a3a4d;
+}
+.list-group-item .badge {
+    background: #4cafef;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}

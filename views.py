@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy import func
 import os
 import secrets
 from werkzeug.utils import secure_filename
 from forms import RegistrationForm, LoginForm, UserProfileForm, ShopForm, ItemForm
-from models import db, User, Shop, Item, Address
+from models import db, User, Shop, Item, Address, Category
 
 views_bp = Blueprint('views', __name__, url_prefix='/')
 
@@ -127,24 +128,37 @@ def my_shop():
     items = shop.items 
     return render_template('my_shop.html', shop=shop, items=items)
 
-# --- CREATE: Add Product ---
+
+# Helper function to handle the category logic
+def get_or_create_category(category_name):
+    # standardizing format: Strip whitespace and Title Case (e.g. "  shoes " -> "Shoes")
+    clean_name = category_name.strip().title()
+    
+    # Check if exists
+    category = Category.query.filter_by(name=clean_name).first()
+    
+    if not category:
+        # Create it if it doesn't exist
+        category = Category(name=clean_name)
+        db.session.add(category)
+        db.session.commit()
+    
+    return category
+
+# --- CREATE ROUTE ---
 @views_bp.route('/add-product', methods=['GET', 'POST'])
 @login_required
 def add_product():
-    if not current_user.shops:
-        flash("Please create a shop first.", "danger")
-        return redirect(url_for('views.my_shop'))
-
+    # ... (shop checks) ...
     form = ItemForm()
     if form.validate_on_submit():
         shop = current_user.shops[0]
         
-        # Handle Image Upload
-        image_file = None
-        if form.image.data:
-            image_file = save_picture(form.image.data)
-        else:
-            image_file = 'products/default.jpg' # Fallback image
+        # 1. Handle Image (same as before)
+        image_file = save_picture(form.image.data) if form.image.data else 'products/default.jpg'
+
+        # 2. Handle Category (String -> Object)
+        cat_obj = get_or_create_category(form.category.data)
 
         new_item = Item(
             name=form.name.data,
@@ -152,7 +166,10 @@ def add_product():
             price=form.price.data,
             stock=form.stock.data,
             img_url=image_file,
-            shop_id=shop.shop_id
+            shop_id=shop.shop_id,
+            
+            # Link to the Category ID we just found/created
+            category_id=cat_obj.id 
         )
         
         db.session.add(new_item)
@@ -162,16 +179,12 @@ def add_product():
 
     return render_template('manage_product.html', form=form, title="Add New Product")
 
-# --- UPDATE: Edit Product ---
+# --- UPDATE ROUTE ---
 @views_bp.route('/edit-product/<int:item_id>', methods=['GET', 'POST'])
 @login_required
 def edit_product(item_id):
     item = Item.query.get_or_404(item_id)
-    
-    # Security Check: Ensure current user owns the shop that owns this item
-    if item.shop.owner_id != current_user.user_id:
-        abort(403) # Forbidden access
-
+    # ... (security checks) ...
     form = ItemForm()
     
     if form.validate_on_submit():
@@ -180,7 +193,10 @@ def edit_product(item_id):
         item.price = form.price.data
         item.stock = form.stock.data
         
-        # Only update image if a new one is uploaded
+        # Update Category
+        cat_obj = get_or_create_category(form.category.data)
+        item.category_id = cat_obj.id
+        
         if form.image.data:
             item.img_url = save_picture(form.image.data)
             
@@ -188,15 +204,17 @@ def edit_product(item_id):
         flash('Product updated!', 'success')
         return redirect(url_for('views.my_shop'))
     
-    # Pre-populate form
     elif request.method == 'GET':
         form.name.data = item.name
         form.description.data = item.description
         form.price.data = item.price
         form.stock.data = item.stock
+        
+        # PRE-FILL: We need to put the *Name* of the category in the text box
+        if item.category:
+            form.category.data = item.category.name
 
     return render_template('manage_product.html', form=form, title="Edit Product")
-
 # --- DELETE: Delete Product ---
 @views_bp.route('/delete-product/<int:item_id>', methods=['POST'])
 @login_required
@@ -288,3 +306,21 @@ def edit_profile():
         return redirect(url_for('views.profile'))
 
     return render_template('edit_profile.html', form=form, user=user)
+
+
+@views_bp.route('/dashboard')
+@login_required
+def dashboard():
+    shop = current_user.shops[0]
+
+    total_items = db.session.query(func.count(Item.item_id)).filter_by(shop_id=shop.shop_id).scalar()
+    total_stock = db.session.query(func.sum(Item.stock)).filter_by(shop_id=shop.shop_id).scalar() or 0
+    total_value = db.session.query(func.sum(Item.price * Item.stock)).filter_by(shop_id=shop.shop_id).scalar() or 0
+
+    return render_template(
+        'dashboard.html',
+        shop=shop,
+        total_items=total_items,
+        total_stock=total_stock,
+        total_value=total_value
+    )

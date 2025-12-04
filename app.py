@@ -31,6 +31,7 @@ app.register_blueprint(views_bp)
 if __name__ == '__main__':
     with app.app_context():
         # Creates tables based on models.py
+        db.drop_all()
         db.create_all() 
         
         # Seed default data

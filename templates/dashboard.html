@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title%}Statitics{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ shop.name }} Dashboard</h2>
+
+    <!-- Summary Cards -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center bg-dark text-white">
+                <div class="card-body">
+                    <h5>Total Products</h5>
+                    <h2>{{ total_items }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center bg-dark text-white">
+                <div class="card-body">
+                    <h5>Total Stock</h5>
+                    <h2>{{ total_stock }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center bg-dark text-white">
+                <div class="card-body">
+                    <h5>Inventory Value</h5>
+                    <h2>₱{{ "%.2f"|format(total_value) }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Items -->
+    <h3 class="mt-5">Recent Items</h3>
+    <ul class="list-group">
+        {% for item in recent_items %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ item.name }}
+            <span class="badge bg-success">{{ item.stock }} pcs</span>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

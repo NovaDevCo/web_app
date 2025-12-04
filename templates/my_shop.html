@@ -9,7 +9,7 @@
 {% block content %}
 <div class="shop-container">
     <header class="shop-header">
-        <h2>{{ shop.name }} Studio</h2>
+        <h2>{{ shop.shop_name or shop.name }} Studio</h2>
         <a href="{{ url_for('views.add_product') }}" class="btn-add-product">+ Add New Product</a>
     </header>
 
@@ -19,13 +19,23 @@
             <img src="{{ url_for('static', filename=item.img_url) }}" alt="{{ item.name }}" class="product-img">
             
             <div class="product-info">
-                <h3 class="product-title">{{ item.name }}</h3>
+                <div class="info-header">
+                    <h3 class="product-title">{{ item.name }}</h3>
+                    <span class="category-badge">
+                        {{ item.category.name if item.category else 'Uncategorized' }}
+                    </span>
+                </div>
+
                 <p class="product-desc">{{ item.description }}</p>
-                <p class="product-price">P{{ "%.2f"|format(item.price) }}</p>
-                <p class="product-stock">Stock: {{ item.stock }}</p>
+                
+                <div class="price-stock-row">
+                    <p class="product-price">P{{ "%.2f"|format(item.price) }}</p>
+                    <p class="product-stock">Stock: {{ item.stock }}</p>
+                </div>
 
                 <div class="product-actions">
                     <a href="{{ url_for('views.edit_product', item_id=item.item_id) }}" class="btn-edit">Edit</a>
+                    
                     <form action="{{ url_for('views.delete_product', item_id=item.item_id) }}" method="POST">
                         <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
                     </form>
