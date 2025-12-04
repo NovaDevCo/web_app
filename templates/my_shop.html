@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}My Shop - Likharyo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='my_shop.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="shop-container">
+    <header class="shop-header">
+        <h2>{{ shop.name }} Studio</h2>
+        <a href="{{ url_for('views.add_product') }}" class="btn-add-product">+ Add New Product</a>
+    </header>
+
+    <div class="product-grid">
+        {% for item in items %}
+        <div class="product-card">
+            <img src="{{ url_for('static', filename=item.img_url) }}" alt="{{ item.name }}" class="product-img">
+            
+            <div class="product-info">
+                <h3 class="product-title">{{ item.name }}</h3>
+                <p class="product-desc">{{ item.description }}</p>
+                <p class="product-price">P{{ "%.2f"|format(item.price) }}</p>
+                <p class="product-stock">Stock: {{ item.stock }}</p>
+
+                <div class="product-actions">
+                    <a href="{{ url_for('views.edit_product', item_id=item.item_id) }}" class="btn-edit">Edit</a>
+                    <form action="{{ url_for('views.delete_product', item_id=item.item_id) }}" method="POST">
+                        <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="no-products">
+            <h3>No products found. Start by adding one!</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

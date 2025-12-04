@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Likharyo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Login to your artisan account</p>
+
+        <form method="POST" action="{{ url_for('views.login') }}">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.username.label(class="form-label") }}
+                
+                {% if form.username.errors %}
+                    {{ form.username(class="form-input error-border") }}
+                    <div class="error-msg">
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.username(class="form-input", placeholder="Enter your username") }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                
+                {% if form.password.errors %}
+                    {{ form.password(class="form-input error-border") }}
+                    <div class="error-msg">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.password(class="form-input", placeholder="Enter your password") }}
+                {% endif %}
+            </div>
+
+            <div class="form-options">
+                <label class="checkbox-container">
+                    {{ form.remember_me() }} Remember Me
+                </label>
+            </div>
+
+            <button type="submit" class="auth-btn">Log In</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="{{ url_for('views.sign_up') }}">Sign Up</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

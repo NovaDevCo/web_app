@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Likharyo{% endblock %}</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash-message {{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="fixed-bg"></div>
+
+    <header class="navbar">
+        <div class="navbar-inner">
+            <div class="img-logo">
+                <img src="{{ url_for('static', filename='images/beige.png') }}" alt="Likharyo Logo" />
+            </div>
+            <h1 class="web_title">Likharyo</h1>
+
+            <nav class="nav-buttons">
+                <a href="{{ url_for('views.home') }}" class="nav-link">Home</a>
+                <a href="#" class="nav-link">About</a>
+
+                {% if current_user.is_authenticated %}
+                    
+                    <a href="{{ url_for('views.profile') }}" class="nav-link">My Profile</a>
+                    <a href="#" class="nav-link">Shop</a>
+                    <a href="#" class="nav-link cart-btn">
+                        🛒
+                    </a>
+
+                    <div class="dropdown">
+                        <button class="dropbtn">Menu ▾</button>
+                        <div class="dropdown-content">
+                            
+                            {% if current_user.shops|length > 0 %}
+                                <a href="{{ url_for('views.my_shop') }}" style="color: #ffcc00;">My Shop</a>
+                            {% else %}
+                                <a href="{{ url_for('views.create_shop') }}">Create Shop</a>
+                            {% endif %}
+                            
+                            <hr>
+                            <a href="{{ url_for('views.logout', user_id=current_user.user_id) }}">Log Out</a>
+                        </div>
+                    </div>
+
+                {% else %}
+                    <div class="dropdown">
+                        <button class="dropbtn">Account ▾</button>
+                        <div class="dropdown-content">
+                            <a href="{{ url_for('views.login') }}">Login</a>
+                            <a href="{{ url_for('views.sign_up') }}">Sign Up</a>
+                        </div>
+                    </div>`
+                {% endif %}
+                </nav>
+        </div>
+    </header>
+
+    <main class="content-wrapper">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Likharyo Artisan Platform</p>
+    </footer>
+
+</body>
+</html>

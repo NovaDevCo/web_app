@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='edit_profile.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Profile</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    {{ form.first_name.label }} 
+                    {{ form.first_name(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.last_name.label }} 
+                    {{ form.last_name(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.gender.label }} 
+                    {{ form.gender(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.birthdate.label }} 
+                    {{ form.birthdate(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.contact_num.label }} 
+                    {{ form.contact_num(class="form-control") }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    {{ form.street_address.label }} 
+                    {{ form.street_address(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.city.label }} 
+                    {{ form.city(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.province.label }} 
+                    {{ form.province(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.zip_code.label }} 
+                    {{ form.zip_code(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form.profile_image.label }} 
+            {{ form.profile_image(class="form-control") }}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form.bio.label }} 
+            {{ form.bio(class="form-control", rows="4") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{{ url_for('views.profile') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

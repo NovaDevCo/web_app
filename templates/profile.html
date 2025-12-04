@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="profile-header">
+    <img src="{{ url_for('static', filename=user.profile_img_url or 'artisans/default.jpg') }}" alt="Profile Image"
+         class="profile-img">
+    
+    <h2>{{ user.username }}'s Profile</h2>
+</div>
+
+    <div class="profile-section">
+        <h3>Personal Info</h3>
+        <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+        <p>Gender: {{ user.gender }}</p>
+        <p>Birthdate: {{ user.birthdate }}</p>
+        <p>Contact: {{ user.contact_num }}</p>
+    </div>
+
+    <div class="profile-section">
+        <h3>Bio</h3>
+        <p>{{ user.bio }}</p>
+    </div>
+
+    {% if address %}
+    <div class="profile-section">
+        <h3>Address</h3>
+        <p>{{ address.street_address }}, {{ address.city }}, {{ address.province }} {{ address.zip_code }}</p>
+    </div>
+    {% endif %}
+
+    <div class="edit-button">
+        <a href="{{ url_for('views.edit_profile') }}">Edit Profile</a>
+    </div>
+</div>
+{% endblock %}

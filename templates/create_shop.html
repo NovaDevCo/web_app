@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Create Shop{% endblock %}
+
+{% block extra_css %}
+
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='create_shop.css') }}" /> -->
+{% endblock %}
+
+{% block content %}
+<div class="create-shop-container">
+    <h2>Create Your Shop</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group mb-3">
+            {{ form.shop_name.label }} 
+            {{ form.shop_name(class="form-control") }}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form.shop_description.label }} 
+            {{ form.shop_description(class="form-control", rows="4") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+{% endblock %}
