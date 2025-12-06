@@ -96,6 +96,33 @@ def seed_shop_items():
                     category=other, 
                     img_url='products/1.3.jpg'
                 ),
+                Item(
+                    name="Ceramic Coffee Mug", 
+                    price=250.00,
+                    description="Hand-painted ceramic mug.",
+                    shop_id=my_shop.shop_id, 
+                    stock=20,
+                    category=other, 
+                    img_url='products/1.4.jpg'
+                ),
+                Item(
+                    name="Ceramic Coffee Mug", 
+                    price=250.00,
+                    description="Hand-painted ceramic mug.",
+                    shop_id=my_shop.shop_id, 
+                    stock=20,
+                    category=other, 
+                    img_url='products/1.5.jpg'
+                ), 
+                Item(
+                    name="Ceramic Coffee Mug", 
+                    price=250.00,
+                    description="Hand-painted ceramic mug.",
+                    shop_id=my_shop.shop_id, 
+                    stock=20,
+                    category=other, 
+                    img_url='products/1.5.jpg'
+                ),                 
             ]
             db.session.add_all(seed_items)
             db.session.commit()
